@@ -28,8 +28,6 @@
 
 ![](http://img.nodreame.cn/20210107171841.png)
 
-
-
 既然官方已经帮我们改完了那就没必要自己搞了，直接 git rebase 一波杀穿（主分支做了提交限制 or 流程存在门禁就的就老老实实 merge 吧），可以通过网页或者命令行的方式来处理问题：
 
 > P.S. 就算是我的分支之前刚做了提交也没问题，如下图所示
@@ -71,8 +69,6 @@ git push origin --delete dependabot/npm_and_yarn/axios-0.21.1  # 手动删除"Gi
 
 ![image-20210107215126673](http://img.nodreame.cn/image-20210107215126673.png)
 
-
-
 Release notes 展示了 v0.21.1 相对于 v0.21.0 发生的更新，其中 **Internal and Tests 部分** 都是测试用例的修复，与安全警告关系不大，所以让我们把重点放在 **Fixes and Functionality 部分**，第一项 **Hotfix: Prevent SSRF** 就是对于安全警告的信息.
 
 从后面的链接 [#3410](https://github-redirect.dependabot.com/axios/axios/issues/3410) 点进去，就能了解到这个修复的起因、讨论过程和处理方法.接下来我们就从最初始的 issue 来分析这个安全警告.
@@ -97,7 +93,7 @@ http.createServer(function (req, res) {
 
 现在揭晓答案：
 
-- 浏览器：进入重定向提供的目标网站 http://example.com 
+- 浏览器：进入重定向提供的目标网站 <http://example.com>
 
 ![image-20210108001016060](http://img.nodreame.cn/image-20210108001016060.png)  
 
@@ -121,24 +117,23 @@ http.createServer(function (req, res) {
 
 ![image-20210108020451262](http://img.nodreame.cn/image-20210108020451262.png)
 
-意思是 axios 默认开启了**「 跟随重定向(Follow Redirects) 」**能力（顺便考古到了2015 年是怎么给 axios 加上这个功能的 [follow redirects](https://github.com/axios/axios/pull/146/commits)），并且能够通过改变 ```maxRedirects``` 字段的值来决定 **「 跟随重定向(Follow Redirects) 」 **的开启或关闭.遇到 302 状态码时，如果开启了 **「 跟随重定向(Follow Redirects) 」 ** 就会获取重定向地址并继续跳转，如果不开启就是直接返回结果. 
+意思是 axios 默认开启了**「 跟随重定向(Follow Redirects) 」**能力（顺便考古到了2015 年是怎么给 axios 加上这个功能的 [follow redirects](https://github.com/axios/axios/pull/146/commits)），并且能够通过改变 ```maxRedirects``` 字段的值来决定 **「 跟随重定向(Follow Redirects) 」**的开启或关闭.遇到 302 状态码时，如果开启了 **「 跟随重定向(Follow Redirects) 」** 就会获取重定向地址并继续跳转，如果不开启就是直接返回结果.
 
 现在把 ```maxRedirects``` 字段置为 0 ，再次运行程序，可以看到 axios 对于重定向的处理表现就和 NodeJS 一致了：
 
 ![image-20210108021423393](http://img.nodreame.cn/image-20210108021423393.png)
 
-了解什么是 **「 跟随重定向(Follow Redirects) 」 ** 之后，我们来开始看看提 issue 的老哥遇到的问题~
+了解什么是 **「 跟随重定向(Follow Redirects) 」** 之后，我们来开始看看提 issue 的老哥遇到的问题~
 
-### 1. 初始 issue  分析 
+### 1. 初始 issue  分析
 
 先看看这个安全警告的起因：
 
 - 链接：[issue3369 - 重定向后的请求未通过代理传递](https://github.com/axios/axios/issues/3369)
 - 说明：提 issue 的老哥提出他使用 "携带代理配置" 的 axios 进行访问，由于请求经过代理服务器，且代理服务器永远返回 302，所以老哥期待的运行现象是：
-  - 1）首次请求由于配置了带来，故经过代理服务器地址 [localhost:8080](localhost:8080)，获得 302状态码，由于 axios 默认开启 **「 跟随重定向(Follow Redirects) 」 ** 所以暂时不打印结果，并且 axios 会自动尝试访问重定向后的目标地址 http://example.com；
-  - 2）但是由于代理配置的存在，第二次访问还是会访问到  [localhost:8080](localhost:8080) ，再次获得 302 状态码；
-  - 3）重复上面两个步骤直到到达 axios 的 Follow Redirects 模式次数上限，然后报错；
-
+    - 1）首次请求由于配置了带来，故经过代理服务器地址 [localhost:8080](localhost:8080)，获得 302状态码，由于 axios 默认开启 **「 跟随重定向(Follow Redirects) 」** 所以暂时不打印结果，并且 axios 会自动尝试访问重定向后的目标地址 <http://example.com>；
+    - 2）但是由于代理配置的存在，第二次访问还是会访问到  [localhost:8080](localhost:8080) ，再次获得 302 状态码；
+    - 3）重复上面两个步骤直到到达 axios 的 Follow Redirects 模式次数上限，然后报错；
 
 那么我们现在来看看提 issue 的老哥提供的完整重现代码：
 
@@ -151,7 +146,7 @@ let count = 0
 
 // A fake proxy server
 http.createServer(function (req, res) {
-  	count++ // （我加入的计数逻辑）累加请求次数
+   count++ // （我加入的计数逻辑）累加请求次数
     res.writeHead(302, {location: 'http://example.com'})
     res.end()
   }).listen(PROXY_PORT)
@@ -180,11 +175,11 @@ axios({
 
 ![image-20210108171230057](http://img.nodreame.cn/image-20210108171230057.png)
 
-现象为：**进入代理服务器一次，然后 axios 的请求结果状态码是 200，内容是 http://example.com 的页面内容**. 
+现象为：**进入代理服务器一次，然后 axios 的请求结果状态码是 200，内容是 <http://example.com> 的页面内容**.
 
-根据现象推导执行过程为：首次请求成功进入了代理服务器并且累加了一次计数（且只有这一次），但是步骤 2请求却绕过了 axios 配置里的代理 proxy 直接访问了重定向地址  http://example.com. 
+根据现象推导执行过程为：首次请求成功进入了代理服务器并且累加了一次计数（且只有这一次），但是步骤 2请求却绕过了 axios 配置里的代理 proxy 直接访问了重定向地址  <http://example.com>.
 
-那么现在问题就很明显了，当获得 302 返回时应该 **携带代理配置** 重新发起请求，然而 axios v0.21.0 在重新发起请求时却丢失了**代理配置**，所以要做的事情就是研究下 axios **「 跟随重定向(Follow Redirects) 」 ** 之后为何丢失了**代理配置**.
+那么现在问题就很明显了，当获得 302 返回时应该 **携带代理配置** 重新发起请求，然而 axios v0.21.0 在重新发起请求时却丢失了**代理配置**，所以要做的事情就是研究下 axios **「 跟随重定向(Follow Redirects) 」** 之后为何丢失了**代理配置**.
 
 ### 2. 问题定位 & 修复方案制定
 
@@ -216,7 +211,7 @@ function getDefaultAdapter() {
 
 > Drop-in replacement for Node's `http` and `https` modules that automatically follows redirects.
 
-也就是说该模块兼具内置 http & https 模块的能力，且还具备了 **「 跟随重定向(Follow Redirects) 」 ** 能力（默认 **「 跟随重定向(Follow Redirects) 」 ** 上限为 21 次，即 ```maxRedirects``` 属性）.
+也就是说该模块兼具内置 http & https 模块的能力，且还具备了 **「 跟随重定向(Follow Redirects) 」** 能力（默认 **「 跟随重定向(Follow Redirects) 」** 上限为 21 次，即 ```maxRedirects``` 属性）.
 
 了解了这些之后，想要修复**"代理配置丢失"**的问题，那么就要去了解 follow-redirects 模块的使用方法了，这里找到官方demo：
 
@@ -336,8 +331,8 @@ if (proxy) {
 
 之所以没有达到想要的效果，是因为没有为**「 跟随重定向(Follow Redirects) 」** 请求配置正确的请求目标链接.原本测试用例期望：
 
-- 第一次请求到达代理服务器时，req.url 为 http://www.google.com/，走返回 302 的逻辑并将**「 跟随重定向(Follow Redirects) 」** 的目标链接设置为 http://localhost:4666
-- 第二次请求由 axios 的「 跟随重定向(Follow Redirects) 」能力发出，req.url 应为 http://localhost:4666 
+- 第一次请求到达代理服务器时，req.url 为 <http://www.google.com/>，走返回 302 的逻辑并将**「 跟随重定向(Follow Redirects) 」** 的目标链接设置为 <http://localhost:4666>
+- 第二次请求由 axios 的「 跟随重定向(Follow Redirects) 」能力发出，req.url 应为 <http://localhost:4666>
 
 但是实际情况是第一次请求获得 302 返回后并没有更新目标链接，所以还是要阅读下  [follow-redirects 模块](https://github.com/follow-redirects) 中 ```options.beforeRedirect``` 的调用位置（根目录下的 [index.js](https://github.com/follow-redirects/follow-redirects/blob/master/index.js)）：
 
