@@ -22,23 +22,7 @@
 
 简单提炼下项目中比较重要的部分:
 
-``` md
-├─ dist         最终生成的 axios.js 及其 sourcemap
-├─ test        测试用例
-├─ examples       浏览器测试用例
-├─ index.js       入口文件
-├─ Gruntfile.js     定义了"test"、"build"、"version" 命令的能力
-├─ karma.conf.js   测试逻辑，运行 "grunt test" 会运行该逻辑
-├─ webpack.config.js  生成 axios.js 用的 Webpack 配置文件
-└─ lib        axios库功能实现代码
-  ├─ adapters      - 适配器
-  ├─ cancel       - 取消请求
- ├─ core        - 核心代码（包含 Axios 类、路径&配置合成、请求实现、拦截实现、错误处理）
-  ├─ helpers      - 工具方法实现
-  ├─ axios.js      - 入口文件
- ├─ defaults.js    - 默认配置
- └─ utils.js      - 工具方法
-```
+![image-20210112235407361](http://img.nodreame.cn/image-20210112235407361.png)
 
 ## 三. 从 axios 对象开始分析
 
@@ -419,8 +403,8 @@ InterceptorManager.prototype.eject = function eject(id) {
 至此文章就告一段落了，还记得开始提出的三个问题吗？
 
 - Q1. 如何实现同时支持 ```axios(config)``` 及 ```axios.get(config)``` 语法
-- A1. axios 库暴露的 axios 对象本来就是一个具备 Axios 实例属性的 Axios.prototype.request 函数. 详见[第三节.从 axios 对象开始分析](## 三. 从 axios 对象开始分析).
+- A1. axios 库暴露的 axios 对象本来就是一个具备 Axios 实例属性的 ```Axios.prototype.request``` 函数. 详见"第三节.从 axios 对象开始分析"..
 - Q2. 浏览器和 NodeJS 请求能力的兼容实现
-- A2. 通过判断平台后选择对应平台的适配器实现. 详见[第四节. 封装请求实现--"适配器"](## 四、封装请求实现--"适配器").
+- A2. 通过判断平台后选择对应平台的适配器实现. 详见"第四节. 封装请求实现--'适配器'".
 - Q3. 请求 & 响应拦截器实现
-- A3. 通过数组的形式管理, 将请求拦截器、请求、响应拦截器都放在"请求流程数组 chain" 中，请求时依次执行直到 "请求流程数组 chain" 为空. 详见[第五节. 拦截器实现](## 五. 拦截器实现).
+- A3. 通过数组的形式管理, 将请求拦截器、请求、响应拦截器都放在"请求流程数组 chain" 中，请求时依次执行直到 "请求流程数组 chain" 为空. 详见"第五节. 拦截器实现".
