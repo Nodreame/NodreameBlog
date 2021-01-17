@@ -107,15 +107,15 @@ module.exports = {
 
 执行打包命令 ```npx webpack``` 完成打包：
 
-![image-20210117182520391](http://img.nodreame.cn/image-20210117182520391.png)
+![](http://img.nodreame.cn/image-20210117182520391.png)
 
 用命令行查看打包结果，并使用 http-server 运行本地服务器：
 
-![image-20210117182731257](http://img.nodreame.cn/image-20210117182731257.png)
+![](http://img.nodreame.cn/image-20210117182731257.png)
 
 OK，除了一些 emoji 没显示图像，大部分布局基本一致.
 
-![image-20210117182918098](http://img.nodreame.cn/image-20210117182918098.png)
+![](http://img.nodreame.cn/image-20210117182918098.png)
 
 这部分代码已经放到 Github 上了有兴趣可以看看：
 
@@ -198,11 +198,11 @@ yarn add -D vue-loader vue-template-compiler
 
 最后修改 webpack.config.js 如下：
 
-![image-20210117205553060](http://img.nodreame.cn/image-20210117205553060.png)
+![](http://img.nodreame.cn/image-20210117205553060.png)
 
 接着运行 ```npx webpack``` 完成打包，可以看到页面已经成功显示出 App.vue 的内容：
 
-![image-20210117205839278](http://img.nodreame.cn/image-20210117205839278.png)
+![](http://img.nodreame.cn/image-20210117205839278.png)
 
 这部分代码已经放到 Github 上了有兴趣可以看看：
 
@@ -215,11 +215,11 @@ yarn add -D vue-loader vue-template-compiler
 
 因为现在还没有加入 vue-router 来做路由管理，所以暂时使用比较原始的方法做过渡 -- 直接在 App.vue 做引入（由于直接返回字符串所以用 v-html 实现展示）：
 
-![image-20210117212321731](http://img.nodreame.cn/image-20210117212321731.png)
+![](http://img.nodreame.cn/image-20210117212321731.png)
 
 效果如下：
 
-![image-20210117212456633](http://img.nodreame.cn/image-20210117212456633.png)
+![](http://img.nodreame.cn/image-20210117212456633.png)
 
 OK，至此我们已经使用 markdown 文件成功地创建了一个Vue 驱动的 SPA 网站，并且实现客户端渲染(CSR)方式的打包.
 
@@ -312,11 +312,11 @@ module.exports = merge(baseConfig, {
 
 运行 npx webpack --config webpack.ssrclient.config.js 进行打包：
 
-![image-20210117225750010](http://img.nodreame.cn/image-20210117225750010.png)
+![](http://img.nodreame.cn/image-20210117225750010.png)
 
 结果生成了 *main.js* 和对应的 *vue-ssr-client-manifest.json*:
 
-![image-20210117225656303](http://img.nodreame.cn/image-20210117225656303.png)
+![](http://img.nodreame.cn/image-20210117225656303.png)
 
 ### 3. SSR服务端程序打包
 
@@ -350,21 +350,21 @@ module.exports = merge(baseConfig, {
 
 第一次运行的结果：
 
-![image-20210117231427323](http://img.nodreame.cn/image-20210117231427323.png)
+![](http://img.nodreame.cn/image-20210117231427323.png)
 
 检查我的配置编写应该没有问题之后，想起 VuePress 用的 Webpack4，而我用的是 Webpack5 所以可能会出一些问题，所以网上搜索了一下找到了解决方法 <https://github.com/vuejs/vue/issues/11718>，为了方便大家查看我就把重点截一下图：
 
-![image-20210117233227867](http://img.nodreame.cn/image-20210117233227867.png)
+![](http://img.nodreame.cn/image-20210117233227867.png)
 
 刚好一个人问了这个问题然后上面这个老哥回复了解决方案，需要修改 node_modules/vue-server-renderer/server-plugin.js 的代码，当然这不是太工程化的处理方案，但现在暂时也只能这样解决了~（提出解决方案的老哥也提出 Webpack4 现在暂时是得到更广泛的支持的，如果想少遇点问题可以暂时切回 Webpack4）.
 
 修改之后的运行结果：
 
-![image-20210117233242604](http://img.nodreame.cn/image-20210117233242604.png)
+![](http://img.nodreame.cn/image-20210117233242604.png)
 
 现在打包结果目录的情况如下：
 
-![image-20210117233350998](http://img.nodreame.cn/image-20210117233350998.png)
+![](http://img.nodreame.cn/image-20210117233350998.png)
 
 ### 4. 执行服务端渲染
 
@@ -436,15 +436,15 @@ main()
 
 执行服务端渲染程序：
 
-![image-20210118001958783](http://img.nodreame.cn/image-20210118001958783.png)
+![](http://img.nodreame.cn/image-20210118001958783.png)
 
 生成 index.html 成功：
 
-![image-20210118002026722](http://img.nodreame.cn/image-20210118002026722.png)
+![](http://img.nodreame.cn/image-20210118002026722.png)
 
 来看看效果，控制台中又看到了熟悉的 data-server-rendered 了~
 
-![image-20210118002155478](http://img.nodreame.cn/image-20210118002155478.png)
+![](http://img.nodreame.cn/image-20210118002155478.png)
 
 至此服务端渲染(SSR)方式打包渲染的方式已经基本实现，markdown经过层层处理终于成为一个网站了~
 

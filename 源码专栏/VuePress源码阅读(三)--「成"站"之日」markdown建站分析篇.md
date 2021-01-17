@@ -31,11 +31,11 @@ markdown 是一种可用于在纯文本文档中添加格式化元素标记语�
 
 首先来到共享流程中的 app.process 阶段（node_modules/@vuepress/core/lib/node/App.js）：
 
-![截屏2021-01-16_下午7_45_58](http://img.nodreame.cn/%E6%88%AA%E5%B1%8F2021-01-16_%E4%B8%8B%E5%8D%887_45_58.png)
+![](http://img.nodreame.cn/%E6%88%AA%E5%B1%8F2021-01-16_%E4%B8%8B%E5%8D%887_45_58.png)
 
 可以看到这里通过 createMarkdown 函数获取到了 markdown，然后我们先倒推看看 createMarkdown 来自哪里（node_modules/@vuepress/core/lib/node/createMarkdown.js）：
 
-![image-20210116195200370](http://img.nodreame.cn/image-20210116195200370.png)
+![](http://img.nodreame.cn/image-20210116195200370.png)
 
 这里的 siteConfig 其实就是 config.js 的配置，这里其实就是在 @vuepress/markdown 提供的 createMarkdown 前包装了一层，目的就是给 markdownConfig 配置添加两个属性.
 
@@ -43,7 +43,7 @@ markdown 是一种可用于在纯文本文档中添加格式化元素标记语�
 
 那么什么是 [markdown-it](https://github.com/markdown-it/markdown-it) 呢？其实它是一个 markdown 的解析库，它能解析 markdown 文档，并将其渲染为 HTML 文档，官方 Demo 如下：
 
-![image-20210116202447238](http://img.nodreame.cn/image-20210116202447238.png)
+![](http://img.nodreame.cn/image-20210116202447238.png)
 
 其用法简单来说就是使用一组配置来获取 markdown-it 提供的对象，这一步就是刚刚 markdown-it-chain 做的事情，然后用这个对象调用 render 即可~ 详细用法可见 <https://markdown-it.github.io/markdown-it/>
 
@@ -53,7 +53,7 @@ markdown 是一种可用于在纯文本文档中添加格式化元素标记语�
 
 回忆前面对于 VuePress dev 和 build 流程的分析（文章：[VuePress源码阅读(二)--dev和build的执行流程分析](https://juejin.cn/post/6918015439922528269)），在 dev 和 build 的 process 函数中都会经历一个构建 Webpack 配置的阶段 prepareWebpackConfig，但是 dev 和 build 的 webpack 构建流程略有不同（左侧为 dev ，右侧为 build）：
 
-![image-20210116205430534](http://img.nodreame.cn/image-20210116205430534.png)
+![](http://img.nodreame.cn/image-20210116205430534.png)
 
 可以看到相同的是都调用了 "createClientConfig（即「客户端配置构建」）"，不同的是：
 
@@ -64,11 +64,11 @@ markdown 是一种可用于在纯文本文档中添加格式化元素标记语�
 
 createBaseConfig 全流程比较长就不截图了，大概就是把平时 webpack.config.js 中的配置写了一遍，这里只截一下在一堆 loader 中的 markdown-loader 的配置，这里显示它接收 ```.md``` 后缀文件然后使用 markdown-loader 处理：
 
-![image-20210116211841930](http://img.nodreame.cn/image-20210116211841930.png)
+![](http://img.nodreame.cn/image-20210116211841930.png)
 
 这个 markdown-loader 也是 @vuepress 自带的，我们在里面找到了使用 markdown-it 对象调用 render函数生成 html 的代码：
 
-![image-20210116212943752](http://img.nodreame.cn/image-20210116212943752.png)
+![](http://img.nodreame.cn/image-20210116212943752.png)
 
 ok，这样 markdown 文件"成站"的整个流程已经打通了~
 
