@@ -19,7 +19,7 @@
 
 前面两篇Vuepress源码分析的文章已经把整个 dev 和 build 的流程走过一遍了，现在我们对整个流程做一次整理：
 
-![VuePress流程](http://img.nodreame.cn/VuePress%E6%B5%81%E7%A8%8B.png)
+![VuePress流程](http://img.nodreame.cn/VuePress%E6%B5%81%E7%A8%8B.jpg)
 
 现在来思考一下整个流程中，VuePress 如何整合技术来实现 markdown 文件的建站.
 
