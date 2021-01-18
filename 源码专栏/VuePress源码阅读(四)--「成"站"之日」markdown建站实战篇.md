@@ -1,6 +1,6 @@
 # VuePress源码阅读(四) -- 「成"站"之日」markdown建站实战篇
 
-![d0290e21c28dc3a047ce9121a5f21ae4c057f905.jpg@1320w_760h](http://img.nodreame.cn/d0290e21c28dc3a047ce9121a5f21ae4c057f905.jpg@1320w_760h.webp)
+![](http://img.nodreame.cn/d0290e21c28dc3a047ce9121a5f21ae4c057f905.jpg@1320w_760h.webp)
 
 系列文章：
 
@@ -128,7 +128,7 @@ OK，除了一些 emoji 没显示图像，大部分布局基本一致.
 
 上面只是个纯静态的最简网站搭建，而 VuePress 是基于 Vue 构建的，那么现在我们也来模拟这个流程.
 
-首先是跑起在当前项目加入 vue，然后创建Vue实例并完成相应打包.
+首先是在当前项目加入 vue，然后创建Vue实例并完成相应打包.
 
 所以修改入口文件 pkg/client/clientEntry.js 为：
 
